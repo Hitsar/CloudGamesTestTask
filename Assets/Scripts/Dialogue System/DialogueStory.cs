@@ -1,36 +1,42 @@
 using System;
-using TMPro;
 using UnityEngine;
 
 namespace DialogueSystem
 {
     public class DialogueStory : MonoBehaviour
     {
-        [SerializeField] private Stories[] _stories;
-        [SerializeField] private TMP_Text _text;
+        [SerializeField] private Story[] _stories;
+        private Story _currentStory;
         
-        public event Action<string> ChangedStory; 
+        public event Action<Story> ChangedStory;
 
         [Serializable]
-        private struct Stories
+        public struct Story
         {
-            [field: SerializeField] public string Tag { get; private set; }
-            [field: SerializeField] public string Text { get; private set; }
+            [field: SerializeField] public string Tag {get; private set;}
+            [field: SerializeField] public string Text {get; private set;}
+            [field: SerializeField] public Answer[] Answers {get; private set;}
+        }
+        
+        [Serializable]
+        public struct Answer
+        {
+            [field: SerializeField] public string Text {get; private set;}
+            [field: SerializeField] public string ReposeText {get; private set;}
         }
 
         private void Awake() => ChangeStory(_stories[0].Tag);
 
-        public void ChangeStory(string newTag)
+        public void ChangeStory(string tag)
         {
-            foreach (Stories storey in _stories)
+            foreach(Story story in _stories)
             {
-                if (storey.Tag != newTag) continue;
-                
-                _text.text = storey.Text;
-                ChangedStory?.Invoke(newTag);
+                if (story.Tag != tag) continue;
+                _currentStory = story;
+                ChangedStory?. Invoke(_currentStory);
                 return;
             }
-            Debug.LogError($"Story don't contain ({newTag}) tag!");
+            Debug.LogError($"Stories do not contain the tag ({tag})");
         }
     }
 }

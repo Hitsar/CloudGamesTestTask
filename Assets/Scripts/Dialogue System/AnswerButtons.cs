@@ -1,0 +1,48 @@
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace DialogueSystem
+{
+    public class AnswerButtons : MonoBehaviour
+    {
+        [SerializeField] private Button[] _buttons;
+        private TMP_Text[] _buttonsText;
+        private string[] _currentReplyTags;
+        private DialogueStory _dialogueStory;
+
+        private void Awake()
+        {
+            _dialogueStory = FindObjectOfType<DialogueStory>();
+            _dialogueStory.ChangedStory += ChangeAnswers;
+            
+            _currentReplyTags = new string[_buttons.Length];
+            _buttonsText = new TMP_Text[_buttons.Length];
+            int button = 0;
+            for (int i = 0; i < _buttons.Length; i++)
+            {
+                _buttons[i].onClick.AddListener(() => SendAnswer(button++));
+                _buttonsText[i] = _buttons[i].gameObject.GetComponentInChildren<TMP_Text>();
+            }
+        }
+
+        private void ChangeAnswers(DialogueStory.Story story)
+        {
+            for(int i = 0; i < _buttonsText.Length; i++)
+            {
+                if (story.Answers.Length <= i)
+                {
+                    _buttonsText[i].text = null;
+                    _buttons[i].interactable = false;
+                    continue;
+                }
+
+                _buttonsText[i].text = story.Answers[i].Text;
+                _currentReplyTags[i] = story.Answers[i].ReposeText;
+                _buttons[i].interactable = true;
+            }
+        }
+
+        private void SendAnswer(int button) => _dialogueStory.ChangeStory(_currentReplyTags[button]);
+    }
+}

@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace DialogueSystem
@@ -14,13 +15,13 @@ namespace DialogueSystem
             _dialogueStory.gameObject.SetActive(false);
         }
 
-        private void Disable(string tag) 
+        private void Disable(DialogueStory.Story story)
         {
-            foreach (string disableTag in _disableTags)
+            if (_disableTags.Any(disableTag => story.Tag == disableTag))
             {
-                if (tag != disableTag) continue;
                 _dialogueStory.gameObject.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked;
+                return;
             }
         }
 
