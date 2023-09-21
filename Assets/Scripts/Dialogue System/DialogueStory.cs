@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DialogueSystem
@@ -6,8 +8,7 @@ namespace DialogueSystem
     public class DialogueStory : MonoBehaviour
     {
         [SerializeField] private Story[] _stories;
-        private Story _currentStory;
-        
+        private Dictionary<string, Story> _storiesDictionary;
         public event Action<Story> ChangedStory;
 
         [Serializable]
@@ -25,18 +26,13 @@ namespace DialogueSystem
             [field: SerializeField] public string ReposeText {get; private set;}
         }
 
-        private void Awake() => ChangeStory(_stories[0].Tag);
-
-        public void ChangeStory(string tag)
+        private void Start()
         {
-            foreach(Story story in _stories)
-            {
-                if (story.Tag != tag) continue;
-                _currentStory = story;
-                ChangedStory?. Invoke(_currentStory);
-                return;
-            }
-            Debug.LogError($"Stories do not contain the tag ({tag})");
+            _storiesDictionary = _stories.ToDictionary(key => key.Tag, element => element);
+            print(_storiesDictionary);
+            ChangeStory(_stories[0].Tag);
         }
+
+        public void ChangeStory(string tag) => ChangedStory?.Invoke(_storiesDictionary[tag]);
     }
 }

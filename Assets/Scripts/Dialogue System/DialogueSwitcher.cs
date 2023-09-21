@@ -12,17 +12,13 @@ namespace DialogueSystem
         {
             _dialogueStory = FindObjectOfType<DialogueStory>(true);
             _dialogueStory.ChangedStory += Disable;
-            _dialogueStory.gameObject.SetActive(false);
         }
 
         private void Disable(DialogueStory.Story story)
         {
-            if (_disableTags.Any(disableTag => story.Tag == disableTag))
-            {
-                _dialogueStory.gameObject.SetActive(false);
-                Cursor.lockState = CursorLockMode.Locked;
-                return;
-            }
+            if (_disableTags.All(disableTag => story.Tag != disableTag)) return;
+            _dialogueStory.gameObject.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void OnTriggerEnter(Collider other)

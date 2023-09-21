@@ -18,6 +18,7 @@ namespace DialogueSystem
             
             _currentReplyTags = new string[_buttons.Length];
             _buttonsText = new TMP_Text[_buttons.Length];
+            
             int button = 0;
             for (int i = 0; i < _buttons.Length; i++)
             {
