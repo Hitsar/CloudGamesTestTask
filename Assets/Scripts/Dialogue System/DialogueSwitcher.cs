@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace DialogueSystem
@@ -14,9 +16,10 @@ namespace DialogueSystem
             _dialogueStory.ChangedStory += Disable;
         }
 
-        private void Disable(DialogueStory.Story story)
+        private async void Disable(DialogueStory.Story story)
         {
             if (_disableTags.All(disableTag => story.Tag != disableTag)) return;
+            await Task.Delay(1000);
             _dialogueStory.gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
         }

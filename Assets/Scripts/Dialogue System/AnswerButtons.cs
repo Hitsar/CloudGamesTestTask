@@ -19,10 +19,10 @@ namespace DialogueSystem
             _currentReplyTags = new string[_buttons.Length];
             _buttonsText = new TMP_Text[_buttons.Length];
             
-            int button = 0;
             for (int i = 0; i < _buttons.Length; i++)
             {
-                _buttons[i].onClick.AddListener(() => SendAnswer(button++));
+                int button = i;
+                _buttons[i].onClick.AddListener(() => SendAnswer(button));
                 _buttonsText[i] = _buttons[i].gameObject.GetComponentInChildren<TMP_Text>();
             }
         }

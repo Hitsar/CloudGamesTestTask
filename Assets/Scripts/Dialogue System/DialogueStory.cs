@@ -29,7 +29,6 @@ namespace DialogueSystem
         private void Start()
         {
             _storiesDictionary = _stories.ToDictionary(key => key.Tag, element => element);
-            print(_storiesDictionary);
             ChangeStory(_stories[0].Tag);
         }
 
